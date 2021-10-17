@@ -1,0 +1,16 @@
+# node packages
+ui/node_modules/
+
+# expo
+ui/.expo-shared
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+ui/tsconfig.json
+
+# app specific
+db
+
+# secrets
+secrets.properties

@@ -1,0 +1,70 @@
+version: "3.7"
+services:
+    db:
+      image: postgres:12.0
+      container_name: comhrac_db
+      environment:
+       - POSTGRES_USER=testuser
+       - POSTGRES_PASSWORD=testuser_pwd
+       - POSTGRES_DB=comhrac
+       - proxy_bind_port=5432
+       - proxy_port=35431
+       - proxy_mode=tcp
+       - proxy_host=db.comhrac.vcap.me
+      volumes:
+        - ./db/data:/var/lib/postgresql/data
+        - ./db/scripts:/docker-entrypoint-initdb.d/
+      labels:
+        backend: "True"
+
+    api:
+      tty: true
+      container_name: comhrac_api
+      build:
+        context: api
+      depends_on:
+        - db
+      volumes:
+        - ./api:/app
+      ports:
+        - 7777:7777
+      env_file:
+        - api/env/dev.properties
+        - api/env/secrets.properties
+      restart:
+        on-failure
+      labels:
+        backend: "True"
+      logging:
+        driver: json-file
+        options:
+          max-size: "50k"
+          max-file: "5"
+
+    ui:
+      tty: true
+      container_name: comhrac_ui
+      build:
+        context: ui
+        target: dev
+      ports:
+        - 19000:19000
+        - 19001:19001
+        - 19002:19002
+      environment:
+        - EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
+      volumes:
+        - ./ui:/app/ui
+        - ./ui/node_modules:/app/ui/node_modules:delegated
+      env_file:
+        - ./ui/.env.development
+        - .env.properties
+      restart:
+        on-failure
+      labels:
+        backend: "True"
+      logging:
+        driver: json-file
+        options:
+          max-size: "50k"
+          max-file: "5"
