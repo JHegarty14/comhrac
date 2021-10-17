@@ -1,6 +1,6 @@
-# COMRAC
+# COMHRAC
 
-Comhrac (Gaelic for "Combat") is a comprehensive training, nutrition, and social platform for combat sport athletes. 
+Comhrac (Gaelic for "Combat") is a comprehensive training, nutrition, and social platform for martial artists and combat sport athletes. 
 
 ## Development
 
